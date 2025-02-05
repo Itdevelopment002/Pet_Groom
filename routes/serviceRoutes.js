@@ -23,7 +23,7 @@ const upload = multer({
 
 // Add Category
 router.post("/category", upload.single("categoryImg"), (req, res) => {
-  const { categoryName, description, price, colorcode } = req.body;
+  const { categoryName, description, price, colorcode,isBestSeller  } = req.body;
 
   if (!categoryName) {
     return res.status(400).json({ message: "Category name is required" });
@@ -32,8 +32,8 @@ router.post("/category", upload.single("categoryImg"), (req, res) => {
   const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
   const sql =
-    "INSERT INTO categories (categoryName, categoryImg,description,price,colorcode) VALUES (?, ?,?,?,?)";
-  db.query(sql, [categoryName, imagePath, description, price, colorcode], (err, result) => {
+    "INSERT INTO categories (categoryName, categoryImg,description,price,colorcode,isBestSeller ) VALUES (?, ?,?,?,?,?)";
+  db.query(sql, [categoryName, imagePath, description, price, colorcode,isBestSeller ], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -85,6 +85,12 @@ router.put("/category/:id", upload.single("categoryImg"), (req, res) => {
     updateSql +=
       updateParams.length > 0 ? ", colorcode = ?" : " colorcode = ?";
     updateParams.push(colorcode);
+  }
+
+  if (isBestSeller) {
+    updateSql +=
+      updateParams.length > 0 ? ", isBestSeller = ?" : " isBestSeller = ?";
+    updateParams.push(isBestSeller);
   }
 
   let imagePath;
