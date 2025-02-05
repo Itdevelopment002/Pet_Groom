@@ -60,7 +60,7 @@ router.get("/categories", (req, res) => {
 // Update Category
 router.put("/category/:id", upload.single("categoryImg"), (req, res) => {
   const { id } = req.params;
-  const { categoryName,description,price,colorcode } = req.body;
+  const { categoryName,description,price,colorcode,isBestSeller } = req.body;
 
   let updateSql = "UPDATE categories SET";
   const updateParams = [];
